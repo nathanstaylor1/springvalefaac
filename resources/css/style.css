@@ -227,7 +227,7 @@ a:hover{
 .carousel-caption {
   top: 3vh;
   left: 55vw;
-  border: 0.7vw dotted #EE8121;
+  border: 0.7vw solid #EE8121;
   border-radius: 1000px; 
   padding: 0;
   width: 20vw;
