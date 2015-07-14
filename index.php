@@ -89,7 +89,7 @@ get('/contact', function () {	render('contact', array('title' => "Contact"));});
 			$recipient = "nathanstaylor1@gmail.com";
 			$subject = "Website contact form message from: $name";
 			$mailheader = "From: $email \r\n";
-			mail($recipient, $subject, $formcontent, $mailheader) or die("Error!");
+			//mail($recipient, $subject, $formcontent, $mailheader) or die("Error!");
 			render('thankyou');
 		} else {
 			render('contact', array('title' => "Contact",
