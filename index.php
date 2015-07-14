@@ -1,154 +1,182 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />   
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php
 
-    <link rel="stylesheet" type="text/css" href="http://mplus-fonts.sourceforge.jp/webfonts/mplus_webfonts.css" />  
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel='stylesheet' type="text/css" href='resources/css/style.css'/>
+require 'vendor/autoload.php';
+require 'app/includes/dispatch.php';
+require 'app/includes/functions.php';
 
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type='text/javascript' src='resources/js/script.js'></script>
-</head>
-<body>
+// Load the configuration file
+config('source', 'app/config.ini');
 
-    <?php include 'navbar.php';?>
 
-  <!-- image slider -->
+//STANDARD routing
+get('/index', function () {	
 
-    <div id="frontSlider" class="carousel slide" data-ride="carousel">
-      <!-- Wrapper for slides -->
-      <div class="carousel-inner" role="listbox">
-        <div class="item active">
-          <img src="resources/css/images/foot1.jpg" alt="">
-          <div class="carousel-caption">
-            <h3>HEADING1</h3>
-            <div class = "backing"></div>
-          </div>
+	$archive = get_posts(1, 3);
+	render('frontpage', array(
+		'title' => "Home",
+		'archive' => $archive
+	));
 
-        </div>
+});
+	//locations
+get('/locations', function () {	render('locations', array('title' => "Locations"));});
+	get('/locations/springvale', function () {render('locations/springvale', array('title' => "Springvale"));});
+	get('/locations/lynbrook', function () {render('locations/lynbrook', array('title' => "Lynbrook"));});
+	//conditions
+get('/conditions', function () { render('conditions', array('title' => "Common Conditions"));});
+	get('/conditions/diabetes', function () { render('conditions/diabetes', array('title' => "Diabetes"));});
+	get('/conditions/flat', function () { render('conditions/flat', array('title' => "Flat feet"));});
+	get('/conditions/heel', function () { render('conditions/heel', array('title' => "Heel pain"));});
+	get('/conditions/knee', function () { render('conditions/knee', array('title' => "Knee pain"));});
+	get('/conditions/shin', function () { render('conditions/shin', array('title' => "Shin pain"));});
+	get('/conditions/skin', function () { render('conditions/skin', array('title' => "Skin and Nail care"));});
+get('/services', function () {	render('services', array('title' => "Services"));});
+get('/booking', function () {	render('bookings', array('title' => "Bookings"));});
+get('/contact', function () {	render('contact', array('title' => "Contact"));});
+	
+//CONTACT FORM
 
-        <div class="item">
-          <img src="resources/css/images/foot2.jpg" alt="">
-            <div class="carousel-caption">
-              <h3>HEADING2</h3>
-              <div class = "backing"></div>  
-          </div>
-        </div>
+	post('/contact/mail', function () {	
 
-        <div class="item">
-          <img src="resources/css/images/foot3.jpg" alt="">
-          <div class="carousel-caption">
-            <div class = "backing"></div>
-            <h3>HEADING3</h3>
-          </div>
-        </div>
+		function test_input($data) {
+		  $data = strip_tags($data);
+		  $data = trim($data);
+		  $data = stripslashes($data);
+		  $data = htmlspecialchars($data);
+		  return $data;
+		}
 
-        <div class="item">
-          <img src="resources/css/images/foot4.jpg" alt="">
-          <div class="carousel-caption">
-            <div class = "backing"></div>
-            <h3>HEADING4</h3>
-          </div>
-        </div>
-      </div>
+		$name = test_input($_POST['name']);
+		$email = test_input($_POST['email']);
+		$phone = preg_replace("/[^0-9]/", '', test_input($_POST['phone']));
+		$message = test_input($_POST['message']);
+				
+		//validation //
+		$error = "";
 
-      <!-- Left and right controls -->
-      <div id = "slider-buttons">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-          <span class="glyphicon glyphicon-chevron-right"></span>
-      </div>
-        <!-- fase in images on left and right -->
-      <div class = "covers">
-          <div class = "left"></div>
-          <div class = "right"></div>
-      </div>
-    </div>
+		$nameErr = " - Name is required. <br>";
+		$contactErr = " - A valid email or phone number is required. <br>";
+		$messageErr = " - Please write a message. <br>";
 
-    <!-- info blocks -->
+		$nameInputErr = " - Name must only contain letters and whitespace. <br>";
+		$emailInputErr = " - Must ba a valid email address. <br>";
+		$phoneInputErr = " - Must ba a valid phone number. <br>";
 
-    <div id = "info-blocks" class = "container">
-          <div class="row">
-            <div class="col-md-4 white-text">
-                <h2>Heading 1</h2>
-                <h4>Subheading 1</h4>
-                <p>Montes, Vivamus a Integer pede Lorem dis vitae, vel, pretium. mollis ridiculus enim. eget nec, consequat dictum nascetur justo. vitae, nascetur Aenean Aenean </p>
-                <div class = "container"> <a class = "link-button pull-right"> Link 1 </a> </div>
-            </div>
-            <div class="col-md-4 white-text">
-                <h2>Heading 2</h2>
-                <h4 class = "darkerblue-text">Subheading 2</h4>
-                <p>Montes, Vivamus a Integer pede Lorem dis vitae, vel, pretium. mollis ridiculus enim. eget nec, consequat dictum nascetur justo. vitae, nascetur Aenean Aenean </p>
-                <div class = "container"> <a class = "link-button pull-right"> Link 2 </a> </div>
+		if (empty($name)){ 
+			$error .= $nameErr;
+		} elseif ( !preg_match("/^[a-zA-Z ]*$/",$name) ){
+			$error .= $nameInputErr;
+		}
 
-            </div>
-            <div class="col-md-4 white-text">
-                <h2>Heading 3</h2>
-                <h4>Subheading 3</h4>
-                <p>Montes, Vivamus a Integer pede Lorem dis vitae, vel, pretium. mollis ridiculus enim. eget nec, consequat dictum nascetur justo. vitae, nascetur Aenean Aenean </p>
-                <div class = "container"> <a class = "link-button pull-right"> Link 3 </a> </div>
-            </div>
-          </div>
-    </div>
+		if (empty($email) && empty($phone)){ 
+			$error .= $contactErr;
+		} else {
+			if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)){
+				$error .= $emailInputErr;	
+			}
+			if (!empty($phone) && ( strlen($phone) < 8 || strlen($phone) > 12 ) ) {
+				$error .= $phoneInputErr;	
+			}
+		}
 
-  <!-- more content -->
+		if (empty($message)){ 
+			$error .= $messageErr;
+		}
 
-    <div id = "writeup" class = "container">
-        <h1>Detailed Writeup</h1>
-        <div id = "writeup-blocks" class = "container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class = "LE 50"></p>
-                </div>
-                <div class="col-md-6">
-                    <p class = "LE 50"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id = "alt-circle" class = "container-fluid hidden-md hidden-lg">
-        <div class="row">
-            <div class="col-md-12">
-                 <div class = "circle blue center-block white-text">
-                    <span class = "glyphicon glyphicon-map-marker"></span>
-                    <h4> 3/14 Balmoral Avenue, Springvale, Melbourne, Victoria, Australia </h4>
-                    <div class = "container"> <a class = "link-button">Find Us</a> </div>
-                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id = "window" class = "container-fluid">
-        <div class="row">
-            <div class="col-md-8 ">
-                <div id = "window-text" class = "white">
-                    <h1>Testimonials</h1>
-                        <ul>
-                            <li><i>"Thank-you for your high level of care and treatment. I am so happy to say that I no longer suffer with heel pain, I am now pain free and can enjoy getting back to the activities I love."</i> - Lynette Stokie </li>
-                            <li><i>"Thanks to Lynne I now no longer have ankle pain. Friendly, professional and excellent at what she does. Highly recommended!"</i> - Anita Weber </li>
-                            <li><i>"After years of ankle pain, finally found a solution at this place. Fantastic"</i> - Karan Laxman </li>
-                        </ul>
-                </div>
-            </div>
-            <div class="col-md-4 hidden-xs hidden-sm">
-                 <div class = "circle blue pull-right white-text">
-                    <span class = "glyphicon glyphicon-map-marker"></span>
-                    <h4> 3/14 Balmoral Avenue, Springvale, Melbourne, Victoria, Australia </h4>
-                    <div class = "container"> <a class = "link-button">Find Us</a> </div>
-                 </div>
-            </div>
-        </div>
-
-        <div class = "slope top"></div>
-        <img id = "window-photo" src="resources/css/images/clinic1.jpg">      
-    </div>
+		//response
+		if ($error === ""){
+			$formcontent="--  Message from website contact form:  -- \n \n　From: $name \n　Email: $email \n　Phone: $phone \n \n　Message: \n \n $message \n \n ";
+			$recipient = "nathanstaylor1@gmail.com";
+			$subject = "Website contact form message from: $name";
+			$mailheader = "From: $email \r\n";
+			mail($recipient, $subject, $formcontent, $mailheader) or die("Error!");
+			render('thankyou');
+		} else {
+			render('contact', array('title' => "Contact",
+			 'error' => $error,
+			 'name' => $name,
+			 'email' => $email,
+			 'phone' => $phone,
+			 'message' => $message,
+			 ));
+		}
+	});
 
 
 
-    <?php include 'footer.php';?>
 
-</body></html>
+//BLOG ROUTING
+
+// The front page of the blog.
+// This will match the /blog url
+get('/blog', function () {
+
+	$page = from($_GET, 'page');
+	$page = $page ? (int)$page : 1;
+	
+	$posts = get_posts($page);
+
+	$archive = get_posts(1, 30);
+	
+	if(empty($posts) || $page < 1){
+		// a non-existing page
+		not_found();
+	}
+	
+    render('blogmain',array(
+    	'page' => $page,
+		'posts' => $posts,
+		'archive' => $archive,
+		'has_pagination' => has_pagination($page)
+	));
+});
+
+// The post page
+get('/:year/:month/:name',function($year, $month, $name){
+
+	$post = find_post($year, $month, $name);
+
+	if(!$post){
+		not_found();
+	}
+
+	$archive = get_posts(1, 10);
+
+	render('blogpost',array(
+		'title' => $post->title .' ⋅ ' . config('blog.title'),
+		'p' => $post,
+		'archive' => $archive
+	));
+});
+
+// The JSON API
+get('/api/json',function(){
+
+	header('Content-type: application/json');
+
+	// Print the 10 latest posts as JSON
+	echo generate_json(get_posts(1, 10));
+});
+
+// Show the RSS feed
+get('/blog/rss30',function(){
+	header('Content-Type: application/rss+xml');
+	echo generate_rss(get_posts(1, 30));
+});
+get('/blog/rss5',function(){
+	header('Content-Type: application/rss+xml');
+	echo generate_rss(get_posts(1, 5));
+});
+
+
+
+
+// If we get here, it means that
+// nothing has been matched above
+
+get('.*',function(){
+	not_found();
+});
+
+// Serve the blog
+dispatch();

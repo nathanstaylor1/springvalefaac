@@ -1,0 +1,85 @@
+<footer class = "footer">
+
+	<div class = "container">
+
+		<div class="row">
+		  	<div class="col-sm-9"></div>
+		    <div class="col-sm-3">
+	  			<span id = "scrollToTop" class = "glyphicon glyphicon-arrow-up pull-right"></span>
+		    </div>
+		</div>
+
+		<div class="row">
+		  	<div id = 'logoholder' class="col-sm-3 hidden-xs">
+		  		<img id = "footerlogo" alt = "logo" src = "<?php echo site_url() ?>assets/media/images/logo_alpha1.png" class = "img-responsive hidden-xs ">
+    		</div>
+    		<div class="col-sm-9">
+    			<div class = "container-fluid">
+    				<div class="row">
+    					<div class="col-xs-12 hidden-lg hidden-md">
+    						<h5>Contact</h5>
+    						<ul>
+								<li><span class = "glyphicon glyphicon-earphone"></span> +61 3 9546 5902</li>
+								<li><span class = "glyphicon glyphicon-envelope"></span> springvalepodiatry@gmail.com</li>
+								<li><span class = "glyphicon glyphicon-map-marker"></span> 3/14 Balmoral Avenue, Springvale, Melbourne, Victoria, Australia 3171</li>
+								<li><a href = "https://www.facebook.com/springvalepodiatry/timeline"><span class = "glyphicon glyphicon-thumbs-up"></span> Like us on Facebook! </a></li>
+    						</ul>	
+    					</div>
+    					<div class="col-xs-4 hidden-xs hidden-sm">
+    						<h5>Contact</h5>
+    						<ul>
+								<li><span class = "glyphicon glyphicon-earphone"></span> +61 3 9546 5902</li>
+								<li><span class = "glyphicon glyphicon-envelope"></span> springvalepodiatry@gmail.com</li>
+								<li><span class = "glyphicon glyphicon-map-marker"></span> 3/14 Balmoral Avenue, Springvale, Melbourne, Victoria, Australia 3171</li>
+								<li><a href = "https://www.facebook.com/springvalepodiatry/timeline"><span class = "glyphicon glyphicon-thumbs-up"></span> Like us on Facebook! </a></li>
+    						</ul>	
+    					</div>
+
+    					<div class="col-xs-4 hidden-xs hidden-sm">
+    						<h5>Opening Hours:</h5>
+    						<ul>
+    							<li><span class = "glyphicon glyphicon-time"></span> Mon : Closed</li>
+    							<li><span class = "glyphicon glyphicon-time"></span> Tue - Fri : 8:00 - 17:00</li>
+    							<li><span class = "glyphicon glyphicon-time"></span> Sat : 12:00 - 16:00</li>
+    							<li><span class = "glyphicon glyphicon-time"></span> Sun : 11:00 - 16:00</li>
+    						</ul>	
+    					</div>
+    					<div class="col-xs-4 hidden-xs hidden-sm">
+    						<h5>Site Map</h5>
+    						<div class = "container-fluid">
+    							<div class = "row">
+    								<div class = "col-xs-6">
+			    						<ul>
+			    							<li><a href="<?php echo site_url() ?>">Home</a></li>
+			    							<li><a href="<?php echo site_url() ?>locations/">Locations</a></li>
+			    							<li><a href="<?php echo site_url() ?>conditions/">Common Conditions</a></li>
+			    						</ul>
+			    					</div>
+			    					<div class = "col-xs-6">
+			    						<ul>
+			    							<li><a href="<?php echo site_url() ?>services/">Services</a></li>
+			    							<li><a href="<?php echo site_url() ?>blog/">News</a></li>
+			    							<li><a href="<?php echo site_url() ?>booking/">Bookings</a></li>
+			    							<li><a href="<?php echo site_url() ?>contact/">Contact</a></li>
+			    						</ul>
+			    					</div>
+			    				</div>
+			    			</div>
+    					</div>
+    				</div>
+    			</div>		
+    		</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-9"></div>
+			<div class="col-sm-3">
+    			<h8 id = "copyright">
+					&copy; <?php 
+					date_default_timezone_set("Australia/Melbourne");
+					echo date("Y")
+					?> The Foot and Ankle Group
+				</h8>
+			</div>
+		</div>
+	</div>
+</footer>
